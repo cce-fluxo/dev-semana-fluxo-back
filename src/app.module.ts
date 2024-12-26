@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CronogramaPalestraModule } from './cronograma_palestra/cronograma_palestra.module';
 import { CronogramaModule } from './cronograma/cronograma.module';
 import { PalestraModule } from './palestra/palestra.module';
-import { PalestraEmpresaModule } from './palestra_empresa/palestra_empresa.module';
 import { EmpresaModule } from './empresa/empresa.module';
 import { TagModule } from './tag/tag.module';
 import { TagEmpresaModule } from './tag_empresa/tag_empresa.module';
@@ -16,7 +14,7 @@ import { PerguntaModule } from './pergunta/pergunta.module';
 import { UsuarioModule } from './usuario/usuario.module';
 
 @Module({
-  imports: [UsuarioModule, PerguntaModule, RespostaEscolhidaModule, RespostaModule, TagRespostaModule, TagPalestraModule, TagEmpresaModule, TagModule, EmpresaModule, PalestraEmpresaModule, PalestraModule, CronogramaModule, CronogramaPalestraModule],
+  imports: [UsuarioModule, PerguntaModule, RespostaEscolhidaModule, RespostaModule, TagRespostaModule, TagPalestraModule, TagEmpresaModule, TagModule, EmpresaModule, PalestraModule, CronogramaModule],
   controllers: [AppController],
   providers: [AppService],
 })

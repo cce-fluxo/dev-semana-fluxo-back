@@ -16,12 +16,16 @@ model Usuario {
   email String @unique
   telefone String @unique
   datas_disponiveis DateTime
+  id_cronograma Int? @unique
+  cronograma Cronograma? 
+  respostas_escolhidas Resposta_escolhida []
 }
 
 model Pergunta {
   id Int @id @default(autoincrement())
   pergunta String
   respostas Resposta []
+  perguntas_escolhidas Resposta_escolhida []
 }
 
 model Resposta {
@@ -29,6 +33,8 @@ model Resposta {
   texto_resposta String
   id_pergunta Int
   pergunta Pergunta @relation(fields: [id_pergunta], references: [id])
+  respostas_escolhidas Resposta_escolhida []
+  tags Tag_resposta []
 }
 
 model Resposta_escolhida {
@@ -40,3 +46,74 @@ model Resposta_escolhida {
   pergunta Pergunta @relation(fields: [id_pergunta], references: [id])
   resposta Resposta @relation(fields: [id_resposta], references: [id])
 }
+
+model Tag {
+  id Int @id @default(autoincrement())
+  nome String
+  tags_empresa Tag_empresa []
+  tags_resposta Tag_resposta []
+  tags_palestra Tag_palestra []
+}
+
+model Tag_empresa {
+  id Int @id @default(autoincrement())
+  id_empresa Int
+  id_tag Int
+  peso Int
+  tag Tag @relation(fields: [id_tag], references: [id])
+  empresa Empresa @relation(fields: [id_empresa], references: [id])
+  
+}
+
+model Tag_resposta {
+  id Int @id @default(autoincrement())
+  id_resposta Int
+  id_tag Int
+  peso Int
+  tag Tag @relation(fields: [id_tag], references: [id])
+  resposta Resposta @relation(fields: [id_resposta], references: [id])
+  
+}
+
+model Tag_palestra {
+  id Int @id @default(autoincrement())
+  id_palestra Int
+  id_tag Int
+  peso Int
+  tag Tag @relation(fields: [id_tag], references: [id])
+  palestra Palestra @relation(fields: [id_palestra], references: [id])
+  
+}
+
+model Palestra {
+  id Int @id @default(autoincrement())
+  nome String
+  tema String
+  local String
+  horario DateTime
+  Data DateTime
+  tags Tag_palestra []
+  cronogramas Cronograma [] @relation("Cronograma_palestra")
+  empresas Empresa [] @relation("Palestra_empresa")
+}
+
+model Empresa{
+  id Int @id @default(autoincrement())
+  nome String
+  tipo String
+  texto_explicativo String
+  tags Tag_empresa []
+  palestras Palestra [] @relation("Palestra_empresa")
+}
+
+model Cronograma {
+  id Int @id @default(autoincrement())
+  data_envio DateTime
+  metodo_envio String
+  id_usuario Int @unique
+  usuario Usuario @relation(fields: [id_usuario], references: [id])
+  palestras Palestra [] @relation("Cronograma_palestra")
+}
+
+
+
