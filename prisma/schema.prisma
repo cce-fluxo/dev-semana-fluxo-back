@@ -16,7 +16,6 @@ model Usuario {
   email String @unique
   telefone String @unique
   datas_disponiveis DateTime
-  id_cronograma Int? @unique
   cronograma Cronograma? 
   respostas_escolhidas Resposta_escolhida []
 }
