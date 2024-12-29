@@ -15,9 +15,18 @@ model Usuario {
   nome String
   email String @unique
   telefone String @unique
-  datas_disponiveis DateTime
+  curso String
+  periodo String
+  datas_disponiveis Data_usuario []
   cronograma Cronograma? 
   respostas_escolhidas Resposta_escolhida []
+}
+
+model Data_usuario {
+  id Int @id @default(autoincrement())
+  data DateTime
+  id_usuario Int 
+  usuario Usuario @relation(fields: [id_usuario], references: [id])
 }
 
 model Pergunta {
