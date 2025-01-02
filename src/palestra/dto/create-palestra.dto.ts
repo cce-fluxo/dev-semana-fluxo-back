@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsDate, IsString } from "class-validator";
 
 export class CreatePalestraDto {
   @ApiProperty({
@@ -27,14 +28,16 @@ export class CreatePalestraDto {
     description: "Horário da palestra",
     example: "2024-12-31T10:00:00Z",
   })
-  @IsDateString()
-  horario: string;
+  @Type(() => Date)
+  @IsDate()
+  horario: Date;
 
   @ApiProperty({
     description: "Data da palestra",
     example: "2024-12-31T10:00:00Z",
   })
-  @IsDateString()
-  Data: string;
+  @Type(() => Date)
+  @IsDate()
+  Data: Date;
 }
 
