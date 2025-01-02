@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
 import { IsDate, IsString, IsInt } from "class-validator";
 
 export class CreateCronogramaDto {
@@ -6,8 +7,9 @@ export class CreateCronogramaDto {
     description: "Data de envio do cronograma",
     example: "2024-12-31T10:00:00Z",
   })
+  @Type(() => Date)
   @IsDate()
-  data_envio: string;
+  data_envio: Date;
 
   @ApiProperty({
     description: "Método de envio do cronograma",

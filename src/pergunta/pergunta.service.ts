@@ -1,26 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePerguntaDto } from './dto/create-pergunta.dto';
 import { UpdatePerguntaDto } from './dto/update-pergunta.dto';
 
 @Injectable()
 export class PerguntaService {
-  create(createPerguntaDto: CreatePerguntaDto) {
-    return 'This action adds a new pergunta';
+  constructor(private prisma: PrismaService) {}
+
+  async create(createPerguntaDto: CreatePerguntaDto) {
+    try {
+      const pergunta = await this.prisma.pergunta.create({ data: createPerguntaDto });
+      return pergunta;
+    } catch (error) {
+      throw new HttpException('Erro ao criar pergunta. Verifique os dados enviados.', 400);
+    }
   }
 
-  findAll() {
-    return `This action returns all pergunta`;
+  async findAll() {
+    const perguntas = await this.prisma.pergunta.findMany();
+    return {
+      message: perguntas.length
+        ? `Encontradas ${perguntas.length} pergunta(s).`
+        : 'Nenhuma pergunta encontrada.',
+      data: perguntas,
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pergunta`;
+  async findOne(id: number) {
+    const pergunta = await this.prisma.pergunta.findUnique({ where: { id } });
+    if (pergunta) {
+      return pergunta;
+    } else {
+      throw new HttpException(`Pergunta com ID ${id} não encontrada.`, 404);
+    }
   }
 
-  update(id: number, updatePerguntaDto: UpdatePerguntaDto) {
-    return `This action updates a #${id} pergunta`;
+  async update(id: number, updatePerguntaDto: UpdatePerguntaDto) {
+    await this.findOne(id); 
+    try {
+      const perguntaAtualizada = await this.prisma.pergunta.update({
+        where: { id },
+        data: updatePerguntaDto,
+      });
+      return perguntaAtualizada;
+    } catch (error) {
+      throw new HttpException('Erro ao atualizar a pergunta. Verifique os dados enviados.', 400);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} pergunta`;
+  async remove(id: number) {
+    const pergunta = await this.findOne(id); 
+    try {
+      await this.prisma.pergunta.delete({ where: { id } });
+      return `Pergunta "${pergunta.pergunta}" removida com sucesso.`;
+    } catch (error) {
+      throw new HttpException('Erro ao remover a pergunta.', 400);
+    }
   }
 }
