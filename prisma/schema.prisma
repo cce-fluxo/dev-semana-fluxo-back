@@ -32,7 +32,7 @@ model Data_usuario {
 model Pergunta {
   id Int @id @default(autoincrement())
   pergunta String
-  numero Int
+  numero Int @unique
   respostas Resposta []
   perguntas_escolhidas Resposta_escolhida []
 }
