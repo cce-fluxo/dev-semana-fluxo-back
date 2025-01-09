@@ -10,7 +10,7 @@ export class ControladorService {
     private readonly algoritmoService: AlgoritmoService,
   ) {}
 
-  async processarRespostas(usuarioId: number, respostas: { perguntaId: number; respostaId: number }[]) {
+  async processarRespostas(usuarioId: number, metodoEnvio: string,  respostas: { perguntaId: number; respostaId: number }[]) {
     try {
       // 1. Validações iniciais
       if (!usuarioId || !respostas || respostas.length === 0) {
@@ -29,9 +29,11 @@ export class ControladorService {
       });
 
       // 3. Chamar o algoritmo de recomendação
-      const cronograma = await this.algoritmoService.gerarCronograma(usuarioId);
+      const palestrasRecomendas = await this.algoritmoService.recomendarPalestras(usuarioId);
 
-      // 4. Retornar o cronograma gerado
+      //4. montar o cronograma
+      const cronograma = "cronogramaBonito";
+      // 5. Retornar o cronograma gerado
       return cronograma;
     } catch (error) {
       console.error('Erro ao processar respostas:', error);

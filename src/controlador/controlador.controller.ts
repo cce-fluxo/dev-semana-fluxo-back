@@ -8,8 +8,8 @@ export class ControladorController {
   constructor(private readonly controladorService: ControladorService) {}
 
   @Post()
-  async processar(@Body() dados: { usuarioId: number; respostas: { perguntaId: number; respostaId: number }[] }) {
-    const { usuarioId, respostas } = dados;
-    return await this.controladorService.processarRespostas(usuarioId, respostas);
+  async processar(@Body() dados: { usuarioId: number; metodoEnvio: string; respostas: { perguntaId: number; respostaId: number }[] }) {
+    const { usuarioId, metodoEnvio, respostas } = dados;
+    return await this.controladorService.processarRespostas(usuarioId, metodoEnvio, respostas);
   }
 }
