@@ -33,6 +33,7 @@ export class ControladorService {
 
       //4. montar o cronograma
       const cronograma = "cronogramaBonito";
+      
       // 5. Retornar o cronograma gerado
       return cronograma;
     } catch (error) {

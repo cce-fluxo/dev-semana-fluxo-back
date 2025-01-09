@@ -60,7 +60,7 @@ model Tag_empresa {
   id Int @id @default(autoincrement())
   id_empresa Int
   id_tag Int
-  peso Int
+  peso Int?
   tag Tag @relation(fields: [id_tag], references: [id])
   empresa Empresa @relation(fields: [id_empresa], references: [id])
   
@@ -70,7 +70,7 @@ model Tag_resposta {
   id Int @id @default(autoincrement())
   id_resposta Int
   id_tag Int
-  peso Int
+  peso Int?
   tag Tag @relation(fields: [id_tag], references: [id])
   resposta Resposta @relation(fields: [id_resposta], references: [id])
   
@@ -80,7 +80,7 @@ model Tag_palestra {
   id Int @id @default(autoincrement())
   id_palestra Int
   id_tag Int
-  peso Int
+  peso Int?
   tag Tag @relation(fields: [id_tag], references: [id])
   palestra Palestra @relation(fields: [id_palestra], references: [id])
   

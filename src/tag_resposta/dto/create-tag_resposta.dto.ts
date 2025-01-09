@@ -17,10 +17,10 @@ export class CreateTagRespostaDto {
   @IsInt()
   id_tag: number;
 
-  @ApiProperty({
+  /*@ApiProperty({
     description: "Peso da tag para a resposta",
     example: 5,
   })
   @IsInt()
-  peso: number;
+  peso: number;*/
 }
