@@ -2,6 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePerguntaDto } from './dto/create-pergunta.dto';
 import { UpdatePerguntaDto } from './dto/update-pergunta.dto';
+import { Pergunta } from './entities/pergunta.entity';
 
 @Injectable()
 export class PerguntaService {
@@ -17,7 +18,11 @@ export class PerguntaService {
   }
 
   async findAll() {
-    const perguntas = await this.prisma.pergunta.findMany();
+    const perguntas = await this.prisma.pergunta.findMany( {
+      include:{
+        respostas: true,
+      }
+    });
     return {
       message: perguntas.length
         ? `Encontradas ${perguntas.length} pergunta(s).`
@@ -27,7 +32,7 @@ export class PerguntaService {
   }
 
   async findOne(id: number) {
-    const pergunta = await this.prisma.pergunta.findUnique({ where: { id } });
+    const pergunta = await this.prisma.pergunta.findUnique({ where: { id },include: {respostas:true} });
     if (pergunta) {
       return pergunta;
     } else {
