@@ -17,7 +17,11 @@ export class RespostaService {
   }
 
   async findAll() {
-    const respostas = await this.prisma.resposta.findMany();
+    const respostas = await this.prisma.resposta.findMany({
+      include:{
+        tags:true
+      }
+    });
     return {
       message: respostas.length
         ? `Encontradas ${respostas.length} resposta(s).`
@@ -27,7 +31,7 @@ export class RespostaService {
   }
 
   async findOne(id: number) {
-    const resposta = await this.prisma.resposta.findUnique({ where: { id } });
+    const resposta = await this.prisma.resposta.findUnique({ where: { id }, include: {tags:true} });
     if (resposta) {
       return resposta;
     } else {
