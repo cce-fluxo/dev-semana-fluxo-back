@@ -10,7 +10,7 @@ export class ControladorService {
     private readonly algoritmoService: AlgoritmoService,
   ) {}
 
-  async processarRespostas(usuarioId: number, metodoEnvio: string,  respostas: { perguntaId: number; respostaId: number }[]) {
+  async processarRespostas(usuarioId: number, metodoEnvio: string, respostas: { perguntaId: number; respostaId: number }[]) {
     try {
       // 1. Validações iniciais
       if (!usuarioId || !respostas || respostas.length === 0) {
@@ -24,16 +24,29 @@ export class ControladorService {
         id_resposta: resposta.respostaId,
       }));
 
-      await this.prisma.resposta_escolhida.createMany({ //Tem de ser colocado no service de resposta_escolhida para maior robustez
+      await this.prisma.resposta_escolhida.createMany({
         data: entradasRespostaEscolhida,
       });
 
       // 3. Chamar o algoritmo de recomendação
       const palestrasRecomendas = await this.algoritmoService.recomendarPalestras(usuarioId);
 
-      //4. montar o cronograma
-      const cronograma = "cronogramaBonito";
-      
+      // 4. Montar o cronograma
+      // Seleciona as 5 primeiras palestras
+      const palestrasSelecionadas = palestrasRecomendas.slice(0, 5);
+
+      // Cria o cronograma e associa as palestras a ele
+      const cronograma = await this.prisma.cronograma.create({
+        data: {
+          id_usuario: usuarioId,
+          metodo_envio: metodoEnvio,
+          data_envio: new Date(), // Definindo a data de envio
+          palestras: {
+            connect: palestrasSelecionadas.map((palestra) => ({ id: palestra.id })), // Conecta as palestras ao cronograma
+          },
+        },
+      });
+
       // 5. Retornar o cronograma gerado
       return cronograma;
     } catch (error) {
@@ -42,4 +55,5 @@ export class ControladorService {
     }
   }
 }
+
 
