@@ -6,6 +6,7 @@ import { AlgoritmoService } from 'src/algoritmo/algoritmo.service';
 
 @Module({
   providers: [ControladorService, AlgoritmoService, PrismaService],
+  controllers: [ControladorController],
   exports: [ControladorService],
 })
 export class ControladorModule {}
