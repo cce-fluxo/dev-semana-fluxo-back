@@ -24,7 +24,7 @@ export class ControladorService {
         id_resposta: resposta.respostaId,
       }));
 
-      await this.prisma.resposta_escolhida.createMany({
+      await this.prisma.resposta_escolhida.createMany({ //Tem de ser colocado no service de resposta_escolhida para maior robustez
         data: entradasRespostaEscolhida,
       });
 
