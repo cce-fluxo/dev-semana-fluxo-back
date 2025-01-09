@@ -12,11 +12,10 @@ import { RespostaModule } from './resposta/resposta.module';
 import { RespostaEscolhidaModule } from './resposta_escolhida/resposta_escolhida.module';
 import { PerguntaModule } from './pergunta/pergunta.module';
 import { UsuarioModule } from './usuario/usuario.module';
-import { DataUsuarioModule } from './data_usuario/data_usuario.module';
 import { PrismaService } from './prisma/prisma.service';
 
 @Module({
-  imports: [UsuarioModule, PerguntaModule, RespostaEscolhidaModule, RespostaModule, TagRespostaModule, TagPalestraModule, TagEmpresaModule, TagModule, EmpresaModule, PalestraModule, CronogramaModule, DataUsuarioModule],
+  imports: [UsuarioModule, PerguntaModule, RespostaEscolhidaModule, RespostaModule, TagRespostaModule, TagPalestraModule, TagEmpresaModule, TagModule, EmpresaModule, PalestraModule, CronogramaModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })
