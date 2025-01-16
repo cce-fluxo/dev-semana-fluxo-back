@@ -33,7 +33,7 @@ export class ControladorService {
 
       // 4. Montar o cronograma
       // Seleciona as 5 primeiras palestras
-      const palestrasSelecionadas = palestrasRecomendas.slice(0, 3);
+      const palestrasSelecionadas = palestrasRecomendas.slice(0, 4);
 
       // Cria o cronograma e associa as palestras a ele
       const cronograma = await this.prisma.cronograma.create({
@@ -48,6 +48,7 @@ export class ControladorService {
       });
 
       // 5. Retornar o cronograma gerado
+      
       return cronograma;
     } catch (error) {
       console.error('Erro ao processar respostas:', error);

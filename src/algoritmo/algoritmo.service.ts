@@ -5,7 +5,6 @@ import { UsuarioService } from 'src/usuario/usuario.service';
 @Injectable()
 export class AlgoritmoService {
   constructor(private readonly prisma: PrismaService) {}
-
   // Função para calcular relevância
   calcularRelevancia(usuarioTags: string[], palestraTags: string[]): number {
     // Conta as ocorrências de cada tag no usuário
