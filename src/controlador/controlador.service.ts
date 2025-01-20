@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service'; // Ajuste o caminho conforme sua estrutura
 import { AlgoritmoService } from 'src/algoritmo/algoritmo.service';
+import { PdfService } from 'src/pdf-generator/pdf-generator.service';
 
 
 @Injectable()
@@ -8,6 +9,7 @@ export class ControladorService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly algoritmoService: AlgoritmoService,
+    private readonly pdfService: PdfService
   ) {}
 
   async processarRespostas(usuarioId: number, metodoEnvio: string, respostas: { perguntaId: number; respostaId: number }[]) {
@@ -47,7 +49,11 @@ export class ControladorService {
         },
       });
 
-      // 5. Retornar o cronograma gerado
+      // 5. Gerar PDF
+      const caminhoPDF = await this.pdfService.gerarPDF(
+        'https://ler.amazon.com.br/kindle-library',
+        'C:\\Users\\rober\\Documents\\PDFs\\arquivoNovo.pdf'
+      );
       
       return cronograma;
     } catch (error) {
