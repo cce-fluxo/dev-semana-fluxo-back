@@ -16,10 +16,11 @@ import { PrismaService } from './prisma/prisma.service';
 import { ControladorModule } from './controlador/controlador.module';
 import { AlgoritmoService } from './algoritmo/algoritmo.service';
 import { PdfService } from './pdf-generator/pdf-generator.service';
+import { EmailService } from './email/email.service';
 
 @Module({
   imports: [UsuarioModule, PerguntaModule, RespostaEscolhidaModule, RespostaModule, TagRespostaModule, TagPalestraModule, TagEmpresaModule, TagModule, EmpresaModule, PalestraModule, CronogramaModule, ControladorModule],
   controllers: [AppController],
-  providers: [AppService, PrismaService, AlgoritmoService, PdfService],
+  providers: [AppService, PrismaService, AlgoritmoService, PdfService, EmailService],
 })
 export class AppModule {}
