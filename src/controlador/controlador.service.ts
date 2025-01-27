@@ -51,12 +51,10 @@ export class ControladorService {
         },
       });
 
-      // 5. Gerar PDF
-      const caminhoPDF = await this.pdfService.gerarPDF(
-        'https://ler.amazon.com.br/kindle-library',
-        'C:\\Users\\rober\\Documents\\PDFs\\arquivoNovo.pdf'
-      );
-      
+    const caminhoPdf = await this.pdfService.gerarPDF('http://localhost:3000/api#/Controlador/ControladorController_processar', 'C:\\Users\\rober\\Documents\\pdfs\\arquivoNovo.pdf');
+  
+    const enviarEmail = await this.emailService.enviarEmailComPdf('endorsedjam.20221@poli.ufrj.br', 'C:\\Users\\rober\\Documents\\pdfs\\arquivoNovo.pdf');
+  
       return cronograma;
     } catch (error) {
       console.error('Erro ao processar respostas:', error);
