@@ -14,7 +14,6 @@ model Usuario {
   id Int @id @default(autoincrement())
   nome String
   email String @unique
-  telefone String @unique
   curso String
   periodo String
   cronograma Cronograma? 

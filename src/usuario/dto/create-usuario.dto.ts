@@ -17,13 +17,6 @@ export class CreateUsuarioDto {
   email: string;
 
   @ApiProperty({
-    description: "telefone do usuario",
-    example: "(21)2345678",
-  })
-  @IsString()
-  telefone: string;
-
-  @ApiProperty({
     description: "Curso do usuario",
     example: "Engenharia eletronica e de computacao",
   })
