@@ -51,9 +51,22 @@ export class ControladorService {
         },
       });
 
-    const caminhoPdf = await this.pdfService.gerarPDF('https://www.amazon.com.br/', 'C:\\Users\\rober\\Documents\\pdfs\\arquivoNovo.pdf');
+      const path = require('path');
+      const fs = require('fs');
+
+      // Define o diretório de PDFs dentro do seu projeto (ex.: "./documents/pdfs")
+      const pdfDir = path.join(__dirname, 'documents', 'pdfs');
+
+      // Certifica de que o diretório existe, caso contrário crie-o
+      if (!fs.existsSync(pdfDir)) {
+        fs.mkdirSync(pdfDir, { recursive: true });
+      }
+
+    const filePath = path.join(pdfDir, 'arquivoNovo.pdf');
+
+    const caminhoPdf = await this.pdfService.gerarPDF('https://www.amazon.com.br/', filePath);
   
-    const enviarEmail = await this.emailService.enviarEmailComPdf('endorsedjam@gmail.com', 'C:\\Users\\rober\\Documents\\pdfs\\arquivoNovo.pdf');
+    const enviarEmail = await this.emailService.enviarEmailComPdf('endorsedjam@gmail.com', filePath);
   
       return cronograma;
     } catch (error) {
