@@ -51,9 +51,9 @@ export class ControladorService {
         },
       });
 
-    const caminhoPdf = await this.pdfService.gerarPDF('http://localhost:3000/api#/Controlador/ControladorController_processar', 'C:\\Users\\rober\\Documents\\pdfs\\arquivoNovo.pdf');
+    const caminhoPdf = await this.pdfService.gerarPDF('https://www.amazon.com.br/', 'C:\\Users\\rober\\Documents\\pdfs\\arquivoNovo.pdf');
   
-    const enviarEmail = await this.emailService.enviarEmailComPdf('diegosamim@poli.ufrj.br', 'C:\\Users\\rober\\Documents\\pdfs\\arquivoNovo.pdf');
+    const enviarEmail = await this.emailService.enviarEmailComPdf('endorsedjam@gmail.com', 'C:\\Users\\rober\\Documents\\pdfs\\arquivoNovo.pdf');
   
       return cronograma;
     } catch (error) {
