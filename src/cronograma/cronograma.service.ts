@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCronogramaDto } from './dto/create-cronograma.dto';
 import { UpdateCronogramaDto } from './dto/update-cronograma.dto';
@@ -8,6 +8,7 @@ import { UsuarioService } from 'src/usuario/usuario.service';
 export class CronogramaService {
   constructor(
     private prisma: PrismaService,
+    @Inject(forwardRef(() => UsuarioService))
     private usuario: UsuarioService,
   ) {}
 
@@ -40,8 +41,6 @@ export class CronogramaService {
   }
 
   async findUserCronograma(idUsuario: number) {
-    
-    await this.usuario.findOne(idUsuario); //Verifica se o usuario existe
   
     // Busca o cronograma do usuário junto com as palestras associadas
     const cronograma = await this.prisma.cronograma.findUnique({

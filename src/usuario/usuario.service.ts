@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException,  Injectable, Inject, forwardRef } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -8,7 +8,8 @@ import { CronogramaService } from 'src/cronograma/cronograma.service';
 export class UsuarioService {
   constructor(
     private prisma: PrismaService,
-    private cronogramaService: CronogramaService,  // Garantindo que está sendo injetado corretamente
+    @Inject(forwardRef(() => CronogramaService))
+    private cronogramaService: CronogramaService,
   ) {}
 
   async create(createUsuarioDto: CreateUsuarioDto) {
@@ -34,9 +35,13 @@ export class UsuarioService {
   }
 
   async findPalestrasRecomendadas (id: number){
-    const cronograma = await this.cronogramaService.findUserCronograma(id);
-    return cronograma.palestras;
-   
+    try{
+      const usuario = this.findOne(id);
+      const cronograma = await this.cronogramaService.findUserCronograma(id);
+      return cronograma.palestras;
+    } catch(error){
+      throw new HttpException (`${error.meta.target} já cadastrado`, 400);
+    }
   }
   
 

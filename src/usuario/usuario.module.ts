@@ -1,13 +1,12 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CronogramaModule } from 'src/cronograma/cronograma.module';  // Importando o módulo de cronograma
 import { UsuarioController } from './usuario.controller';
+import { CronogramaService } from 'src/cronograma/cronograma.service';
 
 @Module({
-  imports: [forwardRef(() => CronogramaModule)],  // Usando forwardRef para evitar ciclo
   controllers: [UsuarioController],
-  providers: [UsuarioService, PrismaService],
+  providers: [UsuarioService, PrismaService, CronogramaService],
   exports: [UsuarioService],
 })
 export class UsuarioModule {}
