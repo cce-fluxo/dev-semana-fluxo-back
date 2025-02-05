@@ -2,11 +2,14 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CronogramaService } from 'src/cronograma/cronograma.service';
 
 @Injectable()
 export class UsuarioService {
-
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private cronogramaService: CronogramaService,  // Garantindo que está sendo injetado corretamente
+  ) {}
 
   async create(createUsuarioDto: CreateUsuarioDto) {
     try {
@@ -28,6 +31,12 @@ export class UsuarioService {
         : 'Nenhum usuário encontrado.',
       data: usuarios,
     };
+  }
+
+  async findPalestrasRecomendadas (id: number){
+    const cronograma = await this.cronogramaService.findUserCronograma(id);
+    return cronograma.palestras;
+   
   }
   
 

@@ -39,6 +39,23 @@ export class CronogramaService {
     };
   }
 
+  async findUserCronograma(idUsuario: number) {
+    
+    await this.usuario.findOne(idUsuario); //Verifica se o usuario existe
+  
+    // Busca o cronograma do usuário junto com as palestras associadas
+    const cronograma = await this.prisma.cronograma.findUnique({
+      where: { id_usuario: idUsuario },
+      include: { palestras: true }, // Carrega as palestras relacionadas
+    });
+  
+    if (!cronograma) {
+      throw new HttpException(`Cronograma não encontrado para o usuário ${idUsuario}.`, 404);
+    }
+  
+    return cronograma; // Retorna apenas a lista de palestras
+  }
+
   async findOne(id: number) {
     const cronograma = await this.prisma.cronograma.findUnique({
       where: { id },
