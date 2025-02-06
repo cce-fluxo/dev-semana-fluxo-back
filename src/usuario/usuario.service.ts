@@ -35,15 +35,14 @@ export class UsuarioService {
   }
 
   async findPalestrasRecomendadas (id: number){
-    try{
-      const usuario = this.findOne(id);
+    try {
+      const usuario = await this.findOne(id);
       const cronograma = await this.cronogramaService.findUserCronograma(id);
       return cronograma.palestras;
     } catch(error){
-      throw new HttpException (`${error.meta.target} já cadastrado`, 400);
+      throw error;
     }
   }
-  
 
   async findOne(id: number) {
     const usuario = await this.prisma.usuario.findUnique({ where: {id}});

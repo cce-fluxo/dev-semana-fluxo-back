@@ -13,7 +13,7 @@ export class CronogramaService {
   ) {}
 
   async create(createCronogramaDto: CreateCronogramaDto) {
-    //Esse deveria ser o endPoint após clicar no botao de submit?
+    
     await this.usuario.findOne(createCronogramaDto.id_usuario); //Verifica se o usuario existe
     try {
       const cronograma = await this.prisma.cronograma.create({
@@ -52,7 +52,7 @@ export class CronogramaService {
       throw new HttpException(`Cronograma não encontrado para o usuário ${idUsuario}.`, 404);
     }
   
-    return cronograma; // Retorna apenas a lista de palestras
+    return cronograma; 
   }
 
   async findOne(id: number) {

@@ -22,7 +22,7 @@ export class UsuarioController {
     return this.usuarioService.findOne(+id);
   }
 
-  @Get(':id')
+  @Get('/findPalestras/:id')
   findPalestrasRecomendadas(@Param('id') id: string) {
     return this.usuarioService.findPalestrasRecomendadas(+id);
   }
