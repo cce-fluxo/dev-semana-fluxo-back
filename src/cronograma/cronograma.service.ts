@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCronogramaDto } from './dto/create-cronograma.dto';
 import { UpdateCronogramaDto } from './dto/update-cronograma.dto';
@@ -8,11 +8,12 @@ import { UsuarioService } from 'src/usuario/usuario.service';
 export class CronogramaService {
   constructor(
     private prisma: PrismaService,
+    @Inject(forwardRef(() => UsuarioService))
     private usuario: UsuarioService,
   ) {}
 
   async create(createCronogramaDto: CreateCronogramaDto) {
-    //Esse deveria ser o endPoint após clicar no botao de submit?
+    
     await this.usuario.findOne(createCronogramaDto.id_usuario); //Verifica se o usuario existe
     try {
       const cronograma = await this.prisma.cronograma.create({
@@ -37,6 +38,21 @@ export class CronogramaService {
         : 'Nenhum cronograma encontrado.',
       data: cronogramas,
     };
+  }
+
+  async findUserCronograma(idUsuario: number) {
+  
+    // Busca o cronograma do usuário junto com as palestras associadas
+    const cronograma = await this.prisma.cronograma.findUnique({
+      where: { id_usuario: idUsuario },
+      include: { palestras: true }, // Carrega as palestras relacionadas
+    });
+  
+    if (!cronograma) {
+      throw new HttpException(`Cronograma não encontrado para o usuário ${idUsuario}.`, 404);
+    }
+  
+    return cronograma; 
   }
 
   async findOne(id: number) {

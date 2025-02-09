@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service'; // Ajuste o caminho conforme sua estrutura
 import { AlgoritmoService } from 'src/algoritmo/algoritmo.service';
 import { PdfService } from 'src/pdf-generator/pdf-generator.service';
+import { EmailService } from 'src/email/email.service';
 
 
 @Injectable()
@@ -9,7 +10,8 @@ export class ControladorService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly algoritmoService: AlgoritmoService,
-    private readonly pdfService: PdfService
+    private readonly pdfService: PdfService,
+    private readonly emailService: EmailService,
   ) {}
 
   async processarRespostas(usuarioId: number, metodoEnvio: string, respostas: { perguntaId: number; respostaId: number }[]) {
@@ -49,12 +51,23 @@ export class ControladorService {
         },
       });
 
-      // 5. Gerar PDF
-      const caminhoPDF = await this.pdfService.gerarPDF(
-        'https://ler.amazon.com.br/kindle-library',
-        'C:\\Users\\rober\\Documents\\PDFs\\arquivoNovo.pdf'
-      );
-      
+      const path = require('path');
+      const fs = require('fs');
+
+      // Define o diretório de PDFs dentro do seu projeto (ex.: "./documents/pdfs")
+      const pdfDir = path.join(__dirname, 'documents', 'pdfs');
+
+      // Certifica de que o diretório existe, caso contrário crie-o
+      if (!fs.existsSync(pdfDir)) {
+        fs.mkdirSync(pdfDir, { recursive: true });
+      }
+
+    const filePath = path.join(pdfDir, 'arquivoNovo.pdf');
+
+    const caminhoPdf = await this.pdfService.gerarPDF('https://www.amazon.com.br/', filePath);
+  
+    const enviarEmail = await this.emailService.enviarEmailComPdf('endorsedjam@gmail.com', filePath);
+  
       return cronograma;
     } catch (error) {
       console.error('Erro ao processar respostas:', error);

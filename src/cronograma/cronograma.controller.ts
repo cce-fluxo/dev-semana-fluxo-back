@@ -7,10 +7,10 @@ import { UpdateCronogramaDto } from './dto/update-cronograma.dto';
 export class CronogramaController {
   constructor(private readonly cronogramaService: CronogramaService) {}
 
-  @Post()
-  create(@Body() createCronogramaDto: CreateCronogramaDto) {
-    return this.cronogramaService.create(createCronogramaDto);
-  }
+  // @Post()
+  // create(@Body() createCronogramaDto: CreateCronogramaDto) {
+  //   return this.cronogramaService.create(createCronogramaDto);
+  // }
 
   @Get()
   findAll() {

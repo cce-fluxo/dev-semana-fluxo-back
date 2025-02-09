@@ -7,37 +7,51 @@ import * as path from 'path';
 export class PdfService {
   async gerarPDF(url: string, caminhoArquivo: string): Promise<string> {
     // Verifica se o diretório existe, se não, cria
-    const diretorio = path.dirname(caminhoArquivo); // Pega o diretório do caminho do arquivo
+    const diretorio = path.dirname(caminhoArquivo);
     if (!fs.existsSync(diretorio)) {
-      fs.mkdirSync(diretorio, { recursive: true }); // Cria o diretório se não existir
+      fs.mkdirSync(diretorio, { recursive: true });
     }
 
     const browser = await puppeteer.launch({
-      headless: true, // Mantém em modo sem interface gráfica
-      args: ['--no-sandbox', '--disable-setuid-sandbox'], // Recomendado para servidores
+      headless: true, // Modo sem interface gráfica
+      args: ['--no-sandbox', '--disable-setuid-sandbox'], // Para servidores
     });
 
     try {
       const page = await browser.newPage();
 
-      // Navega até a URL fornecida
+      // Configura o timeout máximo e valida a URL
+      if (!this.isValidUrl(url)) {
+        throw new Error(`URL inválida: ${url}`);
+      }
+
       await page.goto(url, {
-        waitUntil: 'networkidle0', // Espera carregar recursos
+        waitUntil: 'networkidle0', // Espera pelo carregamento inicial
+        timeout: 100000, // Aumenta o timeout para 60 segundos
       });
 
       // Salva o PDF no caminho especificado
       await page.pdf({
         path: caminhoArquivo, // Caminho do arquivo gerado
-        format: 'A4', // Configurações básicas
-        printBackground: true, // Inclui os estilos de fundo
+        format: 'A4',
+        printBackground: true,
       });
 
-      return caminhoArquivo; // Retorna o caminho para referência
+      return caminhoArquivo; // Retorna o caminho gerado
     } catch (error) {
-      console.error('Erro ao gerar o PDF:', error);
+      console.error('Erro ao gerar o PDF:', error.message);
       throw new Error('Falha ao gerar PDF.');
     } finally {
       await browser.close();
+    }
+  }
+
+  private isValidUrl(url: string): boolean {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
     }
   }
 }
