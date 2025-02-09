@@ -15,14 +15,22 @@ export class UsuarioService {
   async create(createUsuarioDto: CreateUsuarioDto) {
     try {
       const usuario = await this.prisma.usuario.create({ data: createUsuarioDto });
-      return usuario;
+      return { message: 'Usuário cadastrado com sucesso.', data: usuario };
     } catch (error) {
-      if (error.code === 'P2002') //Codigo de erro Unique constraint failed
-      {
-        throw new HttpException (`${error.meta.target} já cadastrado`, 400);
+      if (error.code === 'P2002') {
+        // Permitir o cadastro e apenas avisar que o email já existia
+        const usuarioExistente = await this.prisma.usuario.findUnique({
+          where: { email: createUsuarioDto.email }, // Ajuste para o campo único correto
+        });
+  
+        return {
+          message: 'Usuário cadastrado, mas o email já estava em uso.',
+          data: usuarioExistente || createUsuarioDto, // Retorna o usuário já existente ou os dados enviados
+        };
       }
+      throw error; // Repassa outros erros não previstos
     }
-  }
+  }  
 
   async findAll() {
     const usuarios = await this.prisma.usuario.findMany();
