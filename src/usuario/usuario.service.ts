@@ -15,22 +15,23 @@ export class UsuarioService {
   async create(createUsuarioDto: CreateUsuarioDto) {
     try {
       const usuario = await this.prisma.usuario.create({ data: createUsuarioDto });
-      return { message: 'Usuário cadastrado com sucesso.', data: usuario };
+      return { message: 'Usuário cadastrado com sucesso.', ...usuario };
     } catch (error) {
       if (error.code === 'P2002') {
         // Permitir o cadastro e apenas avisar que o email já existia
         const usuarioExistente = await this.prisma.usuario.findUnique({
-          where: { email: createUsuarioDto.email }, // Ajuste para o campo único correto
+          where: { email: createUsuarioDto.email },
         });
   
         return {
           message: 'Usuário cadastrado, mas o email já estava em uso.',
-          data: usuarioExistente || createUsuarioDto, // Retorna o usuário já existente ou os dados enviados
+          ...usuarioExistente, // Retorna os dados do usuário diretamente
         };
       }
-      throw error; // Repassa outros erros não previstos
+      throw error;
     }
-  }  
+  }
+  
 
   async findAll() {
     const usuarios = await this.prisma.usuario.findMany();
@@ -42,15 +43,20 @@ export class UsuarioService {
     };
   }
 
-  async findPalestrasRecomendadas (id: number){
+  async findPalestrasRecomendadas(id: number) {
     try {
       const usuario = await this.findOne(id);
       const cronograma = await this.cronogramaService.findUserCronograma(id);
-      return cronograma.palestras;
-    } catch(error){
+      
+      return { 
+        message: "Palestras recomendadas encontradas com sucesso.", 
+        data: cronograma.palestras 
+      };
+    } catch (error) {
       throw error;
     }
   }
+  
 
   async findOne(id: number) {
     const usuario = await this.prisma.usuario.findUnique({ where: {id}});
