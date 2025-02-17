@@ -10,8 +10,8 @@ export class EmailService {
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'robert17ceschini@gmail.com', // Seu email
-        pass: 'lydj xxib vhoc okjy', // Senha do app gerada no Gmail
+        user: 'devprojetosfe@gmail.com', // Seu email
+        pass: 'nbez tdxh ohnh sogm', // Senha do app gerada no Gmail
       },
     });
   }
@@ -20,7 +20,7 @@ export class EmailService {
     try {
       // Configura o email
       const emailOptions = {
-        from: 'robert17ceschini@gmail.com', // Remetente
+        from: 'devprojetosfe@gmail.com', // Remetente
         to: email, // Destinatário
         subject: 'Não abra conteúdo suspeito!',
         text: 'Este PDF pode conter arquivos maliciosos.',
