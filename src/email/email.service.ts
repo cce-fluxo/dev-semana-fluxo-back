@@ -16,14 +16,14 @@ export class EmailService {
     });
   }
 
-  async enviarEmailComPdf(email: string, caminhoPdf: string): Promise<void> {
+  async enviarEmailComPdf(email: string, caminhoPdf: string, nomeUsuario: string): Promise<void> {
     try {
       // Configura o email
       const emailOptions = {
         from: 'devprojetosfe@gmail.com', // Remetente
         to: email, // Destinatário
-        subject: 'Não abra conteúdo suspeito!',
-        text: 'Este PDF pode conter arquivos maliciosos.',
+        subject: 'Cronograma personalizado SEF',
+        text: `Olá ${nomeUsuario}!\nEste é o cronograma que selecionamos para você com base nas suas respostas. Esperamos que goste e aproveite muito!`,
         attachments: [
           {
             filename: 'cronograma.pdf',

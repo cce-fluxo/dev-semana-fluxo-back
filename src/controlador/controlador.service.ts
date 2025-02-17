@@ -66,10 +66,8 @@ export class ControladorService {
   async enviarEmail(usuarioId: number, rotaPrint: string) {
 
       const usuario = await this.usuarioService.findOne(usuarioId);
-      if (!usuario){
-        throw new HttpException("Erro ao encontrar usuário by ID", 404);
-      }
       const emailUsuario = usuario.email;
+      const nomeUsuario = usuario.nome;
 
       const path = require('path');
       const fs = require('fs');
@@ -85,7 +83,7 @@ export class ControladorService {
 
     const caminhoPdf = await this.pdfService.gerarPDF(rotaPrint, filePath);
   
-    const enviarEmail = await this.emailService.enviarEmailComPdf(emailUsuario, filePath);
+    const enviarEmail = await this.emailService.enviarEmailComPdf(emailUsuario, filePath, nomeUsuario);
 }
 
 }
