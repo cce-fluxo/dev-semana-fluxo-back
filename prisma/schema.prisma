@@ -33,7 +33,7 @@ model Resposta {
   id Int @id @default(autoincrement())
   texto_resposta String
   id_pergunta Int
-  pergunta Pergunta @relation(fields: [id_pergunta], references: [id])
+  pergunta Pergunta @relation(fields: [id_pergunta], references: [id], onDelete: Cascade)
   respostas_escolhidas Resposta_escolhida []
   tags Tag_resposta []
 }
@@ -43,9 +43,9 @@ model Resposta_escolhida {
   id_usuario Int
   id_pergunta Int
   id_resposta Int
-  usuario Usuario @relation(fields: [id_usuario], references: [id])
-  pergunta Pergunta @relation(fields: [id_pergunta], references: [id])
-  resposta Resposta @relation(fields: [id_resposta], references: [id])
+  usuario Usuario @relation(fields: [id_usuario], references: [id], onDelete: Cascade)
+  pergunta Pergunta @relation(fields: [id_pergunta], references: [id], onDelete: Cascade)
+  resposta Resposta @relation(fields: [id_resposta], references: [id], onDelete: Cascade)
 }
 
 model Tag {
@@ -61,8 +61,8 @@ model Tag_empresa {
   id_empresa Int
   id_tag Int
   peso Int?
-  tag Tag @relation(fields: [id_tag], references: [id])
-  empresa Empresa @relation(fields: [id_empresa], references: [id])
+  tag Tag @relation(fields: [id_tag], references: [id], onDelete: Cascade)
+  empresa Empresa @relation(fields: [id_empresa], references: [id], onDelete: Cascade)
   
 }
 
@@ -71,8 +71,8 @@ model Tag_resposta {
   id_resposta Int
   id_tag Int
   peso Int?
-  tag Tag @relation(fields: [id_tag], references: [id])
-  resposta Resposta @relation(fields: [id_resposta], references: [id])
+  tag Tag @relation(fields: [id_tag], references: [id], onDelete: Cascade)
+  resposta Resposta @relation(fields: [id_resposta], references: [id], onDelete: Cascade)
   
 }
 
@@ -81,8 +81,8 @@ model Tag_palestra {
   id_palestra Int
   id_tag Int
   peso Int?
-  tag Tag @relation(fields: [id_tag], references: [id])
-  palestra Palestra @relation(fields: [id_palestra], references: [id])
+  tag Tag @relation(fields: [id_tag], references: [id], onDelete: Cascade)
+  palestra Palestra @relation(fields: [id_palestra], references: [id], onDelete: Cascade)
   
 }
 
@@ -112,7 +112,7 @@ model Cronograma {
   data_envio DateTime
   metodo_envio String
   id_usuario Int @unique
-  usuario Usuario @relation(fields: [id_usuario], references: [id])
+  usuario Usuario @relation(fields: [id_usuario], references: [id], onDelete: Cascade)
   palestras Palestra [] @relation("Cronograma_palestra")
 }
 
