@@ -5,9 +5,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AlgoritmoService } from 'src/algoritmo/algoritmo.service';
 import { PdfService } from 'src/pdf-generator/pdf-generator.service';
 import { EmailService } from 'src/email/email.service';
+import { UsuarioService } from 'src/usuario/usuario.service';
+import { CronogramaService } from 'src/cronograma/cronograma.service';
 
 @Module({
-  providers: [ControladorService, AlgoritmoService, PrismaService, PdfService, EmailService],
+  providers: [ControladorService, AlgoritmoService, PrismaService, PdfService, EmailService, UsuarioService, CronogramaService],
   controllers: [ControladorController],
   exports: [ControladorService],
 })

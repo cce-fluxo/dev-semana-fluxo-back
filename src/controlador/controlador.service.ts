@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service'; // Ajuste o caminho conforme sua estrutura
 import { AlgoritmoService } from 'src/algoritmo/algoritmo.service';
 import { PdfService } from 'src/pdf-generator/pdf-generator.service';
 import { EmailService } from 'src/email/email.service';
+import { UsuarioService } from 'src/usuario/usuario.service';
+import { CronogramaService } from 'src/cronograma/cronograma.service';
 
 
 @Injectable()
@@ -12,6 +14,8 @@ export class ControladorService {
     private readonly algoritmoService: AlgoritmoService,
     private readonly pdfService: PdfService,
     private readonly emailService: EmailService,
+    private readonly usuarioService: UsuarioService,
+    private readonly cronogramaService: CronogramaService
   ) {}
 
   async processarRespostas(usuarioId: number, metodoEnvio: string, respostas: { perguntaId: number; respostaId: number }[]) {
@@ -51,9 +55,24 @@ export class ControladorService {
         },
       });
 
+      return cronograma;
+
+    } catch (error) {
+      console.error('Erro ao processar respostas:', error);
+      throw new Error('Não foi possível processar as respostas.');
+    }
+  }
+
+  async enviarEmail(usuarioId: number, rotaPrint: string) {
+
+      const usuario = await this.usuarioService.findOne(usuarioId);
+      if (!usuario){
+        throw new HttpException("Erro ao encontrar usuário by ID", 404);
+      }
+      const emailUsuario = usuario.email;
+
       const path = require('path');
       const fs = require('fs');
-
       // Define o diretório de PDFs dentro do seu projeto (ex.: "./documents/pdfs")
       const pdfDir = path.join(__dirname, 'documents', 'pdfs');
 
@@ -64,16 +83,11 @@ export class ControladorService {
 
     const filePath = path.join(pdfDir, 'arquivoNovo.pdf');
 
-    const caminhoPdf = await this.pdfService.gerarPDF('https://www.amazon.com.br/', filePath);
+    const caminhoPdf = await this.pdfService.gerarPDF(rotaPrint, filePath);
   
-    const enviarEmail = await this.emailService.enviarEmailComPdf('endorsedjam@gmail.com', filePath);
-  
-      return cronograma;
-    } catch (error) {
-      console.error('Erro ao processar respostas:', error);
-      throw new Error('Não foi possível processar as respostas.');
-    }
-  }
+    const enviarEmail = await this.emailService.enviarEmailComPdf(emailUsuario, filePath);
+}
+
 }
 
 
