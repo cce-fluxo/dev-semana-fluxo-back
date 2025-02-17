@@ -43,6 +43,17 @@ export class ControladorService {
       // Seleciona as 5 primeiras palestras
       const palestrasSelecionadas = palestrasRecomendas.slice(0, 4);
 
+      const cronogramaExistente = await this.prisma.cronograma.findUnique({
+        where: { id_usuario: usuarioId},
+      });
+    
+      if (cronogramaExistente) {
+        // Deleta o cronograma existente
+        console.log("Ja existe 2")
+        await this.prisma.cronograma.delete({
+          where: { id: cronogramaExistente.id },
+        });
+      }
       // Cria o cronograma e associa as palestras a ele
       const cronograma = await this.prisma.cronograma.create({
         data: {

@@ -13,29 +13,17 @@ export class CronogramaService {
   ) {}
 
   async create(createCronogramaDto: CreateCronogramaDto) {
-    
-    await this.usuario.findOne(createCronogramaDto.id_usuario);
-
-  // Tenta encontrar um cronograma já existente para esse usuário
-  const cronogramaExistente = await this.prisma.cronograma.findUnique({
-    where: { id_usuario: createCronogramaDto.id_usuario },
-  });
-
-  if (cronogramaExistente) {
-    // Se já existir, atualiza (patch)
-    const cronogramaAtualizado = await this.prisma.cronograma.update({
-      where: { id: cronogramaExistente.id },
-      data: createCronogramaDto,
+    // Verifica se o usuário existe
+    const usuario = await this.prisma.usuario.findUnique({
+      where: { id: createCronogramaDto.id_usuario },
     });
-    return cronogramaAtualizado;
     
-  } else {
-    // Se não existir, cria um novo cronograma
-    const novoCronograma = await this.prisma.cronograma.create({
-      data: createCronogramaDto,
-    });
-    return novoCronograma;
-  }
+      // Cria um novo cronograma após deletar o anterior
+      const novoCronograma = await this.prisma.cronograma.create({
+        data: createCronogramaDto,
+      });
+    
+      return novoCronograma;
   }
 
   async findAll() {
