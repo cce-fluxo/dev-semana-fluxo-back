@@ -28,4 +28,7 @@ export class CreateUsuarioDto {
     example: "5",
   })
   @IsString()
- periodo: string;}
+ periodo: string;
+
+ emailEnviado: boolean;
+}

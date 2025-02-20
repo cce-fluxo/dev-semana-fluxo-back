@@ -17,6 +17,7 @@ model Usuario {
   email String @unique
   curso String
   periodo String
+  emailEnviado Boolean? @default(false)
   cronograma Cronograma? 
   respostas_escolhidas Resposta_escolhida []
 }

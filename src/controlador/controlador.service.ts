@@ -95,6 +95,8 @@ export class ControladorService {
     const caminhoPdf = await this.pdfService.gerarPDF(rotaPrint, filePath);
   
     const enviarEmail = await this.emailService.enviarEmailComPdf(emailUsuario, filePath, nomeUsuario);
+
+    const marcarEmailComoEnviado = await this.usuarioService.marcarEmailComoEnviado(usuario.id);
 }
 
 }

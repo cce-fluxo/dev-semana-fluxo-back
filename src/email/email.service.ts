@@ -34,6 +34,7 @@ export class EmailService {
 
       // Envia o email
       await this.transporter.sendMail(emailOptions);
+      
       console.log(`Email enviado para ${email}.`);
     } catch (error) {
       console.error(`Erro ao enviar o email: ${error.message}`);

@@ -66,6 +66,13 @@ export class UsuarioService {
     }
   }
 
+  async marcarEmailComoEnviado(id: number) {
+    return await this.prisma.usuario.update({
+      where: { id },
+      data: { emailEnviado: true },
+    });
+  }
+
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
     const usuario = await this.findOne(id);
     const usuarioAtualizado = await this.prisma.usuario.update ({
