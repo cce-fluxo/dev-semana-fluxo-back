@@ -22,13 +22,11 @@ export class UsuarioService {
         const usuarioExistente = await this.prisma.usuario.findUnique({
           where: { email: createUsuarioDto.email },
         });
-  
-        return {
-          message: 'Usuário cadastrado, mas o email já estava em uso.',
-          ...usuarioExistente, // Retorna os dados do usuário diretamente
-        };
+
+        const usuarioAtualizado = await this.update(usuarioExistente.id, createUsuarioDto);
+        return { message: 'Usuário já existia, dados atualizados.', ...usuarioAtualizado };
+
       }
-      throw error;
     }
   }
   
