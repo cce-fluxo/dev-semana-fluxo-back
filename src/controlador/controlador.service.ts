@@ -74,30 +74,33 @@ export class ControladorService {
     }
   }
 
-  async enviarEmail(usuarioId: number, rotaPrint: string) {
-
-      const usuario = await this.usuarioService.findOne(usuarioId);
-      const emailUsuario = usuario.email;
-      const nomeUsuario = usuario.nome;
-
-      const path = require('path');
-      const fs = require('fs');
-      // Define o diretório de PDFs dentro do seu projeto (ex.: "./documents/pdfs")
-      const pdfDir = path.join(__dirname, 'documents', 'pdfs');
-
-      // Certifica de que o diretório existe, caso contrário crie-o
-      if (!fs.existsSync(pdfDir)) {
-        fs.mkdirSync(pdfDir, { recursive: true });
-      }
-
-    const filePath = path.join(pdfDir, 'arquivoNovo.pdf');
-
-    const caminhoPdf = await this.pdfService.gerarPDF(rotaPrint, filePath);
+  async enviarEmail(usuarioId: number, rotasPrint: string[]) {
+    const usuario = await this.usuarioService.findOne(usuarioId);
+    const emailUsuario = usuario.email;
+    const nomeUsuario = usuario.nome;
   
-    const enviarEmail = await this.emailService.enviarEmailComPdf(emailUsuario, filePath, nomeUsuario);
-
-    const marcarEmailComoEnviado = await this.usuarioService.marcarEmailComoEnviado(usuario.id);
-}
+    const path = require('path');
+    const fs = require('fs');
+    const pdfDir = path.join(__dirname, 'documents', 'pdfs');
+  
+    if (!fs.existsSync(pdfDir)) {
+      fs.mkdirSync(pdfDir, { recursive: true });
+    }
+  
+    // Defina caminhos para os dois PDFs
+    const filePath1 = path.join(pdfDir, `cronograma-${nomeUsuario}.pdf`);
+    const filePath2 = path.join(pdfDir, 'palestras.pdf');
+  
+    // Gera os dois PDFs
+    const caminhoPdf1 = await this.pdfService.gerarPDF(rotasPrint[0], filePath1);
+    const caminhoPdf2 = await this.pdfService.gerarPDF(rotasPrint[1], filePath2);
+  
+    // Envia o email com ambos os PDFs anexados
+    const enviarEmail = await this.emailService.enviarEmailComPdfs(emailUsuario, [caminhoPdf1, caminhoPdf2], nomeUsuario);
+  
+    await this.usuarioService.marcarEmailComoEnviado(usuario.id);
+  }
+  
 
 }
 

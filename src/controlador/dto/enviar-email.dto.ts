@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsString } from "class-validator";
+import { IsArray, isArray, IsNumber, IsString } from "class-validator";
 
 // dto/enviar-email.dto.ts
 export class EnviarEmailDto {
@@ -12,9 +12,10 @@ export class EnviarEmailDto {
 
     @ApiProperty({
         description: "Rota da pagina que sera tirado o print",
-        example: "https://www.amazon.com.br/",
+        example: ["https://www.amazon.com.br/", "https://www.youtube.com/watch?v=0TnO1GzKWPc"],
       })
-      @IsString()
-    rotaPrint: string;
+    @IsArray()
+    @IsString({ each: true })
+    rotaPrint: string[];
   }
   
