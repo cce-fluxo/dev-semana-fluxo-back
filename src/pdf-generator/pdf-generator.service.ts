@@ -6,6 +6,7 @@ import * as path from 'path';
 @Injectable()
 export class PdfService {
   async gerarPDF(url: string, caminhoArquivo: string): Promise<string> {
+    console.log(`*Gerar PDF*\nurl:${url}\ncaminho_arquivo:${caminhoArquivo}\n`)
     // Verifica se o diretório existe, se não, cria
     const diretorio = path.dirname(caminhoArquivo);
     if (!fs.existsSync(diretorio)) {
@@ -27,7 +28,7 @@ export class PdfService {
 
       await page.goto(url, {
         waitUntil: 'networkidle0', // Espera pelo carregamento inicial
-        timeout: 100000, // Aumenta o timeout para 60 segundos
+        timeout: 30000, // Aumenta o timeout para 30 segundos
       });
 
       // Salva o PDF no caminho especificado

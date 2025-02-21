@@ -49,7 +49,6 @@ export class ControladorService {
     
       if (cronogramaExistente) {
         // Deleta o cronograma existente
-        console.log("Ja existe 2")
         await this.prisma.cronograma.delete({
           where: { id: cronogramaExistente.id },
         });
@@ -94,8 +93,12 @@ export class ControladorService {
     // Gera os dois PDFs
     const caminhoPdf1 = await this.pdfService.gerarPDF(rotasPrint[0], filePath1);
     const caminhoPdf2 = await this.pdfService.gerarPDF(rotasPrint[1], filePath2);
+    console.log("PDF1 gerado - ", caminhoPdf1);
+    console.log("PDF2 gerado - ", caminhoPdf2);
+
   
     // Envia o email com ambos os PDFs anexados
+    console.log(`${emailUsuario}\n [${caminhoPdf1}, ${caminhoPdf2}]\n ${nomeUsuario} `)
     const enviarEmail = await this.emailService.enviarEmailComPdfs(emailUsuario, [caminhoPdf1, caminhoPdf2], nomeUsuario);
   
     await this.usuarioService.marcarEmailComoEnviado(usuario.id);
