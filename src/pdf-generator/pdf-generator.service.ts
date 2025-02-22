@@ -28,7 +28,7 @@ export class PdfService {
 
       await page.goto(url, {
         waitUntil: 'networkidle0', // Espera pelo carregamento inicial
-        timeout: 30000, // Aumenta o timeout para 30 segundos
+        timeout: 75000, // Aumenta o timeout para 30 segundos
       });
 
       // Salva o PDF no caminho especificado
