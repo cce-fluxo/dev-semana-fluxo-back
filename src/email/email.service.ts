@@ -17,6 +17,7 @@ export class EmailService {
   }
 
   async enviarEmailComPdfs(email: string, caminhosPdfs: string[], nomeUsuario: string): Promise<void> {
+    console.log(`*Enviar Email*\nemail:${email}\ncaminho_pdf1:${caminhosPdfs[0]}\ncaminho_pdf2:${caminhosPdfs[1]}\nnome_usuario: ${nomeUsuario}\n`);
     try {
       // Cria um array de anexos baseado nos caminhos dos PDFs
       const attachments = caminhosPdfs.map((caminho, index) => ({
@@ -32,7 +33,8 @@ export class EmailService {
         text: `Olá ${nomeUsuario}!\nSegue o cronograma e as palestras da SEF.`,
         attachments,
       };
-  
+
+      console.log("Pre-envio de email");
       await this.transporter.sendMail(emailOptions);
       console.log(`Email enviado para ${email}.`);
     } catch (error) {
